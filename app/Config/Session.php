@@ -60,6 +60,23 @@ class Session extends BaseConfig
      */
     public string $savePath = WRITEPATH . 'session';
 
+    public function __construct()
+    {
+        parent::__construct();
+
+        $savePath = trim((string) $this->savePath);
+
+        // Guard against bad env overrides like "null" or relative paths.
+        if ($savePath === '' || strtolower($savePath) === 'null' || ! $this->isAbsolutePath($savePath)) {
+            $this->savePath = WRITEPATH . 'session';
+        }
+    }
+
+    private function isAbsolutePath(string $path): bool
+    {
+        return preg_match('/^(?:[A-Za-z]:[\\\\\/]|\/|\\\\\\\\)/', $path) === 1;
+    }
+
     /**
      * --------------------------------------------------------------------------
      * Session Match IP
