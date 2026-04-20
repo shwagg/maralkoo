@@ -85,11 +85,6 @@
 
                 <button type="submit" id="submitBtn" class="btn btn-login text-white w-100">Login</button>
             </form>
-
-            <div class="text-center mt-3">
-                <span class="text-secondary">No account yet?</span>
-                <a href="/signup" class="link-success fw-semibold">Sign Up</a>
-            </div>
         </div>
     </div>
 

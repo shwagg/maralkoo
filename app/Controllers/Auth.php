@@ -12,11 +12,6 @@ class Auth extends BaseController
         return view('auth/login');
     }
 
-    public function signupPage(): string
-    {
-        return view('auth/signup');
-    }
-
     public function login(): ResponseInterface
     {
         $validation = \Config\Services::validation();
