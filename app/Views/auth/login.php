@@ -72,6 +72,14 @@
         <div class="card-body p-4">
             <div id="loginAlert" class="alert d-none" role="alert"></div>
 
+            <?php if (session('success')): ?>
+                <div class="alert alert-success" role="alert"><?= esc((string) session('success')) ?></div>
+            <?php endif; ?>
+
+            <?php if (session('error')): ?>
+                <div class="alert alert-danger" role="alert"><?= esc((string) session('error')) ?></div>
+            <?php endif; ?>
+
             <form id="loginForm">
                 <div class="mb-3">
                     <label for="username" class="form-label">Username</label>

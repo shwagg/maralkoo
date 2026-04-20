@@ -2,13 +2,27 @@
 
 namespace App\Controllers;
 
+use App\Controllers\Concerns\TracksAuditAndBilling;
 use App\Models\UserModel;
+use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class Auth extends BaseController
 {
-    public function loginPage(): string
+    use TracksAuditAndBilling;
+
+    public function loginPage(): ResponseInterface|string
     {
+        if (session('isLoggedIn')) {
+            $role = strtolower(trim((string) session('role')));
+
+            if ($role === 'admin') {
+                return redirect()->to('/admin/dashboard');
+            }
+
+            return redirect()->to('/user/dashboard');
+        }
+
         return view('auth/login');
     }
 
@@ -52,6 +66,8 @@ class Auth extends BaseController
             'role' => $user['role'],
         ]);
 
+        $this->appendAuditTrail('login', 'User logged in successfully.');
+
         $redirectTo = $user['role'] === 'admin' ? '/admin/dashboard' : '/user/dashboard';
 
         return $this->response->setJSON([
@@ -59,5 +75,13 @@ class Auth extends BaseController
             'message' => 'Login successful.',
             'redirect' => $redirectTo,
         ]);
+    }
+
+    public function logout(): RedirectResponse
+    {
+        $this->appendAuditTrail('logout', 'User logged out.');
+        session()->destroy();
+
+        return redirect()->to('/login')->with('success', 'Logged out successfully.');
     }
 }

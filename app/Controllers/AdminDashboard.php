@@ -1,0 +1,132 @@
+<?php
+
+namespace App\Controllers;
+
+use App\Controllers\Concerns\TracksAuditAndBilling;
+use App\Models\UserModel;
+use CodeIgniter\HTTP\RedirectResponse;
+
+class AdminDashboard extends BaseController
+{
+    use TracksAuditAndBilling;
+
+    public function index(): string
+    {
+        $userModel = new UserModel();
+
+        $data = [
+            'fullname' => (string) session('fullname'),
+            'users' => $userModel->orderBy('id', 'DESC')->findAll(),
+            'auditTrails' => $this->listAuditTrails(null, 30),
+            'auditStorageReady' => $this->getAuditTableName() !== null,
+        ];
+
+        return view('dashboard/admin', $data);
+    }
+
+    public function createUser(): RedirectResponse
+    {
+        $validation = service('validation');
+        $validation->setRules([
+            'fullname' => 'required|min_length[3]|max_length[100]',
+            'username' => 'required|min_length[3]|max_length[50]|is_unique[users.username]',
+            'password' => 'required|min_length[6]|max_length[255]',
+            'role' => 'required|in_list[admin,user]',
+        ]);
+
+        $payload = [
+            'fullname' => trim((string) $this->request->getPost('fullname')),
+            'username' => trim((string) $this->request->getPost('username')),
+            'password' => (string) $this->request->getPost('password'),
+            'role' => strtolower(trim((string) $this->request->getPost('role'))),
+        ];
+
+        if (! $validation->run($payload)) {
+            return redirect()->to('/admin/dashboard')->with('error', implode(' ', $validation->getErrors()));
+        }
+
+        $userModel = new UserModel();
+        $userModel->insert([
+            'fullname' => $payload['fullname'],
+            'username' => $payload['username'],
+            'password' => password_hash($payload['password'], PASSWORD_DEFAULT),
+            'role' => $payload['role'],
+        ]);
+
+        $this->appendAuditTrail('admin_create_user', 'Created user: ' . $payload['username']);
+
+        return redirect()->to('/admin/dashboard')->with('success', 'User account created successfully.');
+    }
+
+    public function updateUser(int $id): RedirectResponse
+    {
+        $userModel = new UserModel();
+        $user = $userModel->find($id);
+
+        if (! is_array($user)) {
+            return redirect()->to('/admin/dashboard')->with('error', 'User account not found.');
+        }
+
+        $fullname = trim((string) $this->request->getPost('fullname'));
+        $username = trim((string) $this->request->getPost('username'));
+        $role = strtolower(trim((string) $this->request->getPost('role')));
+        $password = (string) $this->request->getPost('password');
+
+        if ($fullname === '' || strlen($fullname) < 3 || strlen($fullname) > 100) {
+            return redirect()->to('/admin/dashboard')->with('error', 'Full name must be between 3 and 100 characters.');
+        }
+
+        if ($username === '' || strlen($username) < 3 || strlen($username) > 50) {
+            return redirect()->to('/admin/dashboard')->with('error', 'Username must be between 3 and 50 characters.');
+        }
+
+        if (! in_array($role, ['admin', 'user'], true)) {
+            return redirect()->to('/admin/dashboard')->with('error', 'Role must be either admin or user.');
+        }
+
+        $existing = $userModel->where('username', $username)->where('id !=', $id)->first();
+        if (is_array($existing)) {
+            return redirect()->to('/admin/dashboard')->with('error', 'Username is already in use.');
+        }
+
+        $updateData = [
+            'fullname' => $fullname,
+            'username' => $username,
+            'role' => $role,
+        ];
+
+        if ($password !== '') {
+            if (strlen($password) < 6 || strlen($password) > 255) {
+                return redirect()->to('/admin/dashboard')->with('error', 'Password must be between 6 and 255 characters.');
+            }
+
+            $updateData['password'] = password_hash($password, PASSWORD_DEFAULT);
+        }
+
+        $userModel->update($id, $updateData);
+
+        $this->appendAuditTrail('admin_update_user', 'Updated user account ID: ' . $id);
+
+        return redirect()->to('/admin/dashboard')->with('success', 'User account updated successfully.');
+    }
+
+    public function deleteUser(int $id): RedirectResponse
+    {
+        if ($id === (int) session('userId')) {
+            return redirect()->to('/admin/dashboard')->with('error', 'You cannot delete your own account.');
+        }
+
+        $userModel = new UserModel();
+        $user = $userModel->find($id);
+
+        if (! is_array($user)) {
+            return redirect()->to('/admin/dashboard')->with('error', 'User account not found.');
+        }
+
+        $userModel->delete($id);
+
+        $this->appendAuditTrail('admin_delete_user', 'Deleted user account ID: ' . $id);
+
+        return redirect()->to('/admin/dashboard')->with('success', 'User account deleted successfully.');
+    }
+}
