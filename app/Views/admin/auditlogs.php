@@ -76,7 +76,7 @@
 									<td><?= esc((string) ($trail['username'] ?? $trail['user_id'] ?? '-')) ?></td>
 									<td><?= esc((string) ($trail['role'] ?? '-')) ?></td>
 									<td><?= esc((string) ($trail['action'] ?? '-')) ?></td>
-									<td><?= esc((string) ($trail['details'] ?? '-')) ?></td>
+									<td><?= esc((string) ($trail['details'] ?? $trail['description'] ?? '-')) ?></td>
 									<td><?= esc((string) ($trail['created_at'] ?? $trail['createdAt'] ?? '-')) ?></td>
 								</tr>
 							<?php endforeach; ?>

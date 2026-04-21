@@ -11,7 +11,7 @@ trait TracksAuditAndBilling
 
     protected function getBillingTableName(): ?string
     {
-        return $this->resolveAvailableTable(['billing_history', 'billing_histories', 'bills']);
+        return $this->resolveAvailableTable(['billings', 'billing_history', 'billing_histories', 'bills']);
     }
 
     protected function appendAuditTrail(string $action, string $details = ''): void
@@ -30,6 +30,7 @@ trait TracksAuditAndBilling
             'role' => (string) session('role'),
             'action' => $action,
             'details' => $details,
+            'description' => $details,
             'ip_address' => (string) $this->request->getIPAddress(),
             'user_agent' => (string) $this->request->getUserAgent(),
             'created_at' => date('Y-m-d H:i:s'),
@@ -87,17 +88,11 @@ trait TracksAuditAndBilling
 
         $data = [
             'user_id' => (int) session('userId'),
-            'username' => (string) session('username'),
             'client_name' => $bill['client_name'] ?? '',
-            'account_number' => $bill['account_number'] ?? '',
-            'previous_reading' => $bill['previous_reading'] ?? 0,
-            'current_reading' => $bill['current_reading'] ?? 0,
-            'kwh_used' => $bill['kwh_used'] ?? 0,
-            'rate_per_kwh' => $bill['rate_per_kwh'] ?? 0,
-            'amount_due' => $bill['amount_due'] ?? 0,
-            'billing_date' => date('Y-m-d'),
-            'created_at' => date('Y-m-d H:i:s'),
+            'kw_used' => $bill['kw_used'] ?? 0,
+            'total_amount' => $bill['total_amount'] ?? 0,
             'createdAt' => date('Y-m-d H:i:s'),
+            'created_at' => date('Y-m-d H:i:s'),
         ];
 
         $insert = [];

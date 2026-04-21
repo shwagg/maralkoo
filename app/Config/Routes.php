@@ -27,5 +27,6 @@ $routes->group('user', ['filter' => 'userOnly'], static function (RouteCollectio
 	$routes->get('compute-bill', 'UserDashboard::computeBillPage');
 	$routes->get('billing-history', 'UserDashboard::billingHistory');
 	$routes->get('action-trail', 'UserDashboard::actionTrail');
+	$routes->get('bills/preview', 'UserDashboard::previewBill');
 	$routes->post('bills/compute', 'UserDashboard::computeBill');
 });

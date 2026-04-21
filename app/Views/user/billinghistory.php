@@ -67,28 +67,24 @@
 						<thead>
 							<tr>
 								<th>Client</th>
-								<th>Account</th>
-								<th>kWh Used</th>
-								<th>Rate</th>
-								<th>Amount</th>
-								<th>Date</th>
+								<th>kW Used</th>
+								<th>Total Amount</th>
+								<th>Created At</th>
 							</tr>
 						</thead>
 						<tbody>
 							<?php foreach ($billingHistory as $row): ?>
 								<tr>
 									<td><?= esc((string) ($row['client_name'] ?? '-')) ?></td>
-									<td><?= esc((string) ($row['account_number'] ?? '-')) ?></td>
-									<td><?= esc((string) ($row['kwh_used'] ?? '-')) ?></td>
-									<td><?= esc((string) ($row['rate_per_kwh'] ?? '-')) ?></td>
-									<td><?= esc((string) ($row['amount_due'] ?? '-')) ?></td>
-									<td><?= esc((string) ($row['billing_date'] ?? $row['created_at'] ?? $row['createdAt'] ?? '-')) ?></td>
+									<td><?= esc((string) ($row['kw_used'] ?? $row['kwh_used'] ?? '-')) ?></td>
+									<td><?= esc((string) ($row['total_amount'] ?? $row['amount_due'] ?? '-')) ?></td>
+									<td><?= esc((string) ($row['createdAt'] ?? $row['created_at'] ?? '-')) ?></td>
 								</tr>
 							<?php endforeach; ?>
 
 							<?php if ($billingHistory === []): ?>
 								<tr>
-									<td colspan="6" class="text-center text-muted py-4">No billing history yet.</td>
+									<td colspan="4" class="text-center text-muted py-4">No billing history yet.</td>
 								</tr>
 							<?php endif; ?>
 						</tbody>

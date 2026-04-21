@@ -43,6 +43,13 @@
             border-radius: 0.75rem;
             padding: 0.9rem 1rem;
         }
+
+        .preview-box {
+            background: linear-gradient(130deg, #e8f8f5, #d5f5e3);
+            border: 1px solid #a9dfbf;
+            border-radius: 0.75rem;
+            padding: 0.9rem 1rem;
+        }
     </style>
 </head>
 <body>
@@ -74,33 +81,29 @@
                                 <input id="client_name" name="client_name" type="text" class="form-control" required>
                             </div>
                             <div class="mb-3">
-                                <label for="account_number" class="form-label">Account Number</label>
-                                <input id="account_number" name="account_number" type="text" class="form-control" required>
+                                <label for="kw_used" class="form-label">KW Used</label>
+                                <input id="kw_used" name="kw_used" type="number" step="0.01" min="0" class="form-control" required>
                             </div>
-                            <div class="row g-3">
-                                <div class="col-12 col-md-6">
-                                    <label for="previous_reading" class="form-label">Previous Reading (kWh)</label>
-                                    <input id="previous_reading" name="previous_reading" type="number" step="0.01" min="0" class="form-control" required>
+                            <div class="small text-muted mb-3">
+                                Rates: 1–200 KW = ₱10.00/KW &nbsp;|&nbsp; 201–500 KW = ₱13.00/KW &nbsp;|&nbsp; 501+ KW = ₱15.00/KW.
+                                Total amount is computed automatically.
+                            </div>
+                            <div id="bill-preview" class="preview-box mb-3" style="display:none;">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="fw-semibold">Computed Total</span>
+                                    <strong id="preview-total" class="fs-5 text-success">₱0.00</strong>
                                 </div>
-                                <div class="col-12 col-md-6">
-                                    <label for="current_reading" class="form-label">Current Reading (kWh)</label>
-                                    <input id="current_reading" name="current_reading" type="number" step="0.01" min="0" class="form-control" required>
-                                </div>
+                                <div class="small text-muted mt-1" id="preview-rate"></div>
                             </div>
-                            <div class="mt-3 mb-3">
-                                <label for="rate_per_kwh" class="form-label">Rate per kWh</label>
-                                <input id="rate_per_kwh" name="rate_per_kwh" type="number" step="0.01" min="0.01" class="form-control" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">Compute Bill</button>
+                            <button type="submit" class="btn btn-primary w-100">Save Bill</button>
                         </form>
 
                         <?php if (is_array($lastResult)): ?>
                             <div class="result-box mt-3">
                                 <strong>Last Computation</strong>
                                 <div>Client: <?= esc((string) ($lastResult['client_name'] ?? '')) ?></div>
-                                <div>Account: <?= esc((string) ($lastResult['account_number'] ?? '')) ?></div>
-                                <div>kWh Used: <?= esc(number_format((float) ($lastResult['kwh_used'] ?? 0), 2)) ?></div>
-                                <div>Amount Due: <?= esc(number_format((float) ($lastResult['amount_due'] ?? 0), 2)) ?></div>
+                                <div>KW Used: <?= esc(number_format((float) ($lastResult['kw_used'] ?? $lastResult['kwh_used'] ?? 0), 2)) ?></div>
+                                <div>Total Amount: <?= esc(number_format((float) ($lastResult['total_amount'] ?? $lastResult['amount_due'] ?? 0), 2)) ?></div>
                             </div>
                         <?php endif; ?>
                     </div>
@@ -122,28 +125,24 @@
                                 <thead>
                                     <tr>
                                         <th>Client</th>
-                                        <th>Account</th>
-                                        <th>kWh Used</th>
-                                        <th>Rate</th>
-                                        <th>Amount</th>
-                                        <th>Date</th>
+                                        <th>kW Used</th>
+                                        <th>Total Amount</th>
+                                        <th>Created At</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php foreach ($billingHistory as $row): ?>
                                         <tr>
                                             <td><?= esc((string) ($row['client_name'] ?? '-')) ?></td>
-                                            <td><?= esc((string) ($row['account_number'] ?? '-')) ?></td>
-                                            <td><?= esc((string) ($row['kwh_used'] ?? '-')) ?></td>
-                                            <td><?= esc((string) ($row['rate_per_kwh'] ?? '-')) ?></td>
-                                            <td><?= esc((string) ($row['amount_due'] ?? '-')) ?></td>
-                                            <td><?= esc((string) ($row['billing_date'] ?? $row['created_at'] ?? $row['createdAt'] ?? '-')) ?></td>
+                                            <td><?= esc((string) ($row['kw_used'] ?? $row['kwh_used'] ?? '-')) ?></td>
+                                            <td><?= esc((string) ($row['total_amount'] ?? $row['amount_due'] ?? '-')) ?></td>
+                                            <td><?= esc((string) ($row['createdAt'] ?? $row['created_at'] ?? '-')) ?></td>
                                         </tr>
                                     <?php endforeach; ?>
 
                                     <?php if ($billingHistory === []): ?>
                                         <tr>
-                                            <td colspan="6" class="text-center text-muted py-4">No billing history yet.</td>
+                                            <td colspan="4" class="text-center text-muted py-4">No billing history yet.</td>
                                         </tr>
                                     <?php endif; ?>
                                 </tbody>
@@ -176,7 +175,7 @@
                             <?php foreach ($auditTrails as $trail): ?>
                                 <tr>
                                     <td><?= esc((string) ($trail['action'] ?? '-')) ?></td>
-                                    <td><?= esc((string) ($trail['details'] ?? '-')) ?></td>
+                                    <td><?= esc((string) ($trail['details'] ?? $trail['description'] ?? '-')) ?></td>
                                     <td><?= esc((string) ($trail['created_at'] ?? $trail['createdAt'] ?? '-')) ?></td>
                                 </tr>
                             <?php endforeach; ?>
@@ -192,5 +191,39 @@
             </div>
         </div>
     </div>
+<script>
+(function () {
+    var kwInput      = document.getElementById('kw_used');
+    var previewBox   = document.getElementById('bill-preview');
+    var previewTotal = document.getElementById('preview-total');
+    var previewRate  = document.getElementById('preview-rate');
+    var timer = null;
+
+    function fetchPreview(kw) {
+        previewTotal.textContent = 'Computing…';
+        previewBox.style.display = 'block';
+        fetch('/user/bills/preview?kw_used=' + encodeURIComponent(kw))
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                previewTotal.textContent = data.total_formatted;
+                previewRate.textContent  = data.rate_label;
+            })
+            .catch(function () {
+                previewTotal.textContent = 'Error';
+                previewRate.textContent  = '';
+            });
+    }
+
+    kwInput.addEventListener('input', function () {
+        clearTimeout(timer);
+        var kw = parseFloat(this.value);
+        if (isNaN(kw) || kw < 0 || this.value === '') {
+            previewBox.style.display = 'none';
+            return;
+        }
+        timer = setTimeout(function () { fetchPreview(kw); }, 300);
+    });
+})();
+</script>
 </body>
 </html>
