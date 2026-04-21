@@ -8,7 +8,7 @@
     <style>
         body {
             min-height: 100vh;
-            background-color: #ffffff;
+            background-color: #f5f6fa;
             font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         }
 
@@ -23,6 +23,7 @@
         .login-card {
             width: 100%;
             max-width: 400px;
+            background-color: #ffffff;
             border: none;
         }
 
