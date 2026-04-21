@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\Concerns\TracksAuditAndBilling;
 use App\Models\UserModel;
+use Config\Database;
 use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\HTTP\ResponseInterface;
 
@@ -30,30 +31,43 @@ class Auth extends BaseController
     {
         $validation = \Config\Services::validation();
         $validation->setRules([
-            'username' => 'required|min_length[3]|max_length[50]',
+            'identifier' => 'required|min_length[3]|max_length[100]',
             'password' => 'required|min_length[6]|max_length[255]',
         ]);
 
+        $identifier = trim((string) ($this->request->getPost('identifier') ?? $this->request->getPost('username')));
+
         $payload = [
-            'username' => (string) $this->request->getPost('username'),
+            'identifier' => $identifier,
             'password' => (string) $this->request->getPost('password'),
         ];
 
         if (! $validation->run($payload)) {
             return $this->response->setStatusCode(422)->setJSON([
                 'status' => 'error',
-                'message' => 'Please provide a valid username and password.',
+                'message' => 'Please provide a valid username/email and password.',
                 'errors' => $validation->getErrors(),
             ]);
         }
 
         $userModel = new UserModel();
-        $user = $userModel->where('username', $payload['username'])->first();
+        $canLoginWithEmail = Database::connect()->fieldExists('email', 'users');
+
+        if ($canLoginWithEmail) {
+            $user = $userModel
+                ->groupStart()
+                ->where('username', $payload['identifier'])
+                ->orWhere('email', $payload['identifier'])
+                ->groupEnd()
+                ->first();
+        } else {
+            $user = $userModel->where('username', $payload['identifier'])->first();
+        }
 
         if (! $user || ! password_verify($payload['password'], (string) $user['password'])) {
             return $this->response->setStatusCode(401)->setJSON([
                 'status' => 'error',
-                'message' => 'Invalid username or password.',
+                'message' => 'Invalid username/email or password.',
             ]);
         }
 

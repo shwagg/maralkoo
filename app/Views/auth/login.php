@@ -82,13 +82,13 @@
 
             <form id="loginForm">
                 <div class="mb-3">
-                    <label for="username" class="form-label">Username</label>
-                    <input type="text" class="form-control" id="username" name="username" autocomplete="username" required>
+                    <label for="identifier" class="form-label">Username/Email</label>
+                    <input type="text" class="form-control" id="identifier" name="identifier" autocomplete="username" placeholder="Enter username or email" required>
                 </div>
 
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" autocomplete="current-password" required>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" autocomplete="current-password" required>
                 </div>
 
                 <button type="submit" id="submitBtn" class="btn btn-login text-white w-100">Login</button>
