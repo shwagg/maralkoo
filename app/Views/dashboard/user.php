@@ -68,6 +68,41 @@
             <div class="alert alert-danger"><?= esc((string) session('error')) ?></div>
         <?php endif; ?>
 
+        <div class="row g-3 mb-4">
+            <div class="col-12 col-sm-6 col-lg-4">
+                <div class="card panel h-100">
+                    <div class="card-body d-flex align-items-center gap-3 py-3">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                             style="width:52px;height:52px;background:rgba(42,157,143,0.1);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="var(--mk-b)" viewBox="0 0 16 16">
+                                <path d="M0 13a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 16 13V6a1.5 1.5 0 0 0-1.5-1.5H1.5A1.5 1.5 0 0 0 0 6zM2 10h4v1H2zm5 0h2v1H7zm3 0h2v1h-2zM2 8h12v1H2zm0-2h12v1H2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="text-muted small">Total Bills</div>
+                            <div class="fw-bold fs-3 lh-1"><?= esc((string) $billingCount) ?></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-4">
+                <div class="card panel h-100">
+                    <div class="card-body d-flex align-items-center gap-3 py-3">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                             style="width:52px;height:52px;background:rgba(233,196,106,0.18);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#b38000" viewBox="0 0 16 16">
+                                <path d="M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.12-1.718z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="text-muted small">Total Amount</div>
+                            <div class="fw-bold fs-3 lh-1" style="color:#b38000;">₱<?= esc(number_format((float) $billingTotal, 2)) ?></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row g-4 mb-4">
             <div class="col-12 col-lg-6">
                 <div class="card panel h-100" id="compute-electric-bill">

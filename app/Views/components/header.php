@@ -10,11 +10,13 @@ $subtitle = $fullname !== ''
 
 $menuItems = $isAdmin
 	? [
+		['label' => 'Home', 'href' => '/admin/dashboard'],
 		['label' => 'Manage Users', 'href' => '/admin/manage-users'],
 		['label' => 'View Users', 'href' => '/admin/view-users'],
 		['label' => 'Audit Logs', 'href' => '/admin/audit-logs'],
 	]
 	: [
+		['label' => 'Home', 'href' => '/user/dashboard'],
 		['label' => 'Compute Electric Bill', 'href' => '/user/compute-bill'],
 		['label' => 'Billing History', 'href' => '/user/billing-history'],
 		['label' => 'View Action Trail', 'href' => '/user/action-trail'],
@@ -22,84 +24,126 @@ $menuItems = $isAdmin
 ?>
 
 <style>
-	.mk-app-header {
-		border: 1px solid rgba(13, 110, 253, 0.12);
-		border-radius: 1rem;
-		background: linear-gradient(130deg, #ffffff, #f3f8ff);
-		box-shadow: 0 0.75rem 1.8rem rgba(13, 110, 253, 0.08);
-		padding: 1rem;
-	}
-
-	.mk-app-header .mk-brand {
+	.mk-navbar {
+		background: #ffffff;
+		border-bottom: 1px solid #e9ecef;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+		padding: 0 1.5rem;
+		height: 64px;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		gap: 1rem;
-		margin-bottom: 0.9rem;
-		flex-wrap: wrap;
 	}
 
-	.mk-app-header .mk-title {
-		margin: 0;
-		font-size: 1.15rem;
-		font-weight: 700;
-	}
-
-	.mk-app-header .mk-subtitle {
-		margin: 0.2rem 0 0;
-		color: #6c757d;
-		font-size: 0.92rem;
-	}
-
-	.mk-app-header .mk-menu {
+	.mk-navbar-brand {
 		display: flex;
-		gap: 0.55rem;
+		align-items: center;
+		gap: 0.5rem;
+		text-decoration: none;
+		flex-shrink: 0;
+	}
+
+	.mk-navbar-brand img {
+		height: 36px;
+		width: auto;
+	}
+
+	.mk-navbar-nav {
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		flex: 1;
+		justify-content: center;
 		flex-wrap: wrap;
 	}
 
-	.mk-app-header .mk-menu-link,
-	.mk-app-header .mk-logout {
-		border-radius: 999px;
-		font-size: 0.9rem;
-		padding: 0.45rem 0.85rem;
+	.mk-navbar-nav .mk-nav-link {
+		font-size: 0.92rem;
+		font-weight: 500;
+		color: #6c757d;
 		text-decoration: none;
+		padding: 0.4rem 0.75rem;
+		border-radius: 0.375rem;
+		transition: color 0.15s ease, background 0.15s ease;
+		white-space: nowrap;
 	}
 
-	.mk-app-header .mk-menu-link {
-		background: #eaf2ff;
-		color: #0b57d0;
-		border: 1px solid #cfe1ff;
+	.mk-navbar-nav .mk-nav-link:hover,
+	.mk-navbar-nav .mk-nav-link.active {
+		color: #0d6efd;
+		background: #f0f6ff;
 	}
 
-	.mk-app-header .mk-menu-link:hover {
-		background: #dce9ff;
-		color: #0847ae;
+	.mk-navbar-actions {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		flex-shrink: 0;
 	}
 
-	.mk-app-header .mk-logout {
-		background: #fff3f4;
-		color: #b4232a;
-		border: 1px solid #ffd3d6;
+	.mk-navbar-actions .mk-welcome {
+		font-size: 0.85rem;
+		color: #6c757d;
+		white-space: nowrap;
 	}
 
-	.mk-app-header .mk-logout:hover {
-		background: #ffe9eb;
-		color: #961b22;
+	.mk-navbar-actions .mk-logout-btn {
+		font-size: 0.88rem;
+		font-weight: 500;
+		color: #0d6efd;
+		border: 1.5px solid #0d6efd;
+		background: transparent;
+		padding: 0.38rem 1.1rem;
+		border-radius: 0.375rem;
+		text-decoration: none;
+		transition: background 0.15s ease, color 0.15s ease;
+		white-space: nowrap;
+	}
+
+	.mk-navbar-actions .mk-logout-btn:hover {
+		background: #0d6efd;
+		color: #ffffff;
+	}
+
+	@media (max-width: 768px) {
+		.mk-navbar {
+			flex-wrap: wrap;
+			height: auto;
+			padding: 0.75rem 1rem;
+			gap: 0.5rem;
+		}
+
+		.mk-navbar-nav {
+			order: 3;
+			width: 100%;
+			justify-content: flex-start;
+		}
 	}
 </style>
 
-<header class="mk-app-header mb-3">
-	<div class="mk-brand">
-		<div>
-			<h1 class="mk-title"><?= esc($dashboardTitle) ?></h1>
-			<p class="mk-subtitle"><?= esc($subtitle) ?></p>
-		</div>
-		<a href="/logout" class="mk-logout">Logout</a>
-	</div>
+<header class="mk-navbar mb-3">
+	<a href="<?= $isAdmin ? '/admin/dashboard' : '/user/dashboard' ?>" class="mk-navbar-brand" aria-label="MeralKoo Home">
+		<img src="/assets/MeralKoo.svg" alt="MeralKoo logo">
+	</a>
 
-	<nav class="mk-menu" aria-label="Dashboard menu">
-		<?php foreach ($menuItems as $item): ?>
-			<a href="<?= esc((string) $item['href']) ?>" class="mk-menu-link"><?= esc((string) $item['label']) ?></a>
-		<?php endforeach; ?>
+	<nav aria-label="Dashboard menu">
+		<ul class="mk-navbar-nav">
+			<?php foreach ($menuItems as $item): ?>
+				<li>
+					<a href="<?= esc((string) $item['href']) ?>" class="mk-nav-link"><?= esc((string) $item['label']) ?></a>
+				</li>
+			<?php endforeach; ?>
+		</ul>
 	</nav>
+
+	<div class="mk-navbar-actions">
+		<?php if ($fullname !== ''): ?>
+			<span class="mk-welcome"><?= esc($subtitle) ?></span>
+		<?php endif; ?>
+		<a href="/logout" class="mk-logout-btn">Logout</a>
+	</div>
 </header>

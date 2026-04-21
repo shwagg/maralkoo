@@ -10,9 +10,17 @@ class AdminDashboard extends BaseController
 {
     use TracksAuditAndBilling;
 
-    public function index(): RedirectResponse
+    public function index(): string
     {
-        return redirect()->to('/admin/manage-users');
+        $userModel = new UserModel();
+
+        return view('dashboard/admin', [
+            'fullname'          => (string) session('fullname'),
+            'userCount'         => $userModel->countAll(),
+            'users'             => $userModel->orderBy('id', 'DESC')->findAll(),
+            'auditTrails'       => $this->listAuditTrails(null, 30),
+            'auditStorageReady' => $this->getAuditTableName() !== null,
+        ]);
     }
 
     public function manageUsers(): string
@@ -75,7 +83,7 @@ class AdminDashboard extends BaseController
 
         $this->appendAuditTrail('admin_create_user', 'Created user: ' . $payload['username']);
 
-        return redirect()->to('/admin/manage-users')->with('success', 'User account created successfully.');
+        return redirect()->to('/admin/dashboard')->with('success', 'User account created successfully.');
     }
 
     public function updateUser(int $id): RedirectResponse
@@ -84,7 +92,7 @@ class AdminDashboard extends BaseController
         $user = $userModel->find($id);
 
         if (! is_array($user)) {
-            return redirect()->to('/admin/view-users')->with('error', 'User account not found.');
+            return redirect()->to('/admin/dashboard')->with('error', 'User account not found.');
         }
 
         $fullname = trim((string) $this->request->getPost('fullname'));
@@ -94,29 +102,29 @@ class AdminDashboard extends BaseController
         $password = (string) $this->request->getPost('password');
 
         if ($fullname === '' || strlen($fullname) < 3 || strlen($fullname) > 100) {
-            return redirect()->to('/admin/view-users')->with('error', 'Full name must be between 3 and 100 characters.');
+            return redirect()->to('/admin/dashboard')->with('error', 'Full name must be between 3 and 100 characters.');
         }
 
         if ($username === '' || strlen($username) < 3 || strlen($username) > 50) {
-            return redirect()->to('/admin/view-users')->with('error', 'Username must be between 3 and 50 characters.');
+            return redirect()->to('/admin/dashboard')->with('error', 'Username must be between 3 and 50 characters.');
         }
 
         if ($email === '' || ! filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 255) {
-            return redirect()->to('/admin/view-users')->with('error', 'Please provide a valid email address.');
+            return redirect()->to('/admin/dashboard')->with('error', 'Please provide a valid email address.');
         }
 
         if (! in_array($role, ['admin', 'user'], true)) {
-            return redirect()->to('/admin/view-users')->with('error', 'Role must be either admin or user.');
+            return redirect()->to('/admin/dashboard')->with('error', 'Role must be either admin or user.');
         }
 
         $existing = $userModel->where('username', $username)->where('id !=', $id)->first();
         if (is_array($existing)) {
-            return redirect()->to('/admin/view-users')->with('error', 'Username is already in use.');
+            return redirect()->to('/admin/dashboard')->with('error', 'Username is already in use.');
         }
 
         $existingEmail = $userModel->where('email', $email)->where('id !=', $id)->first();
         if (is_array($existingEmail)) {
-            return redirect()->to('/admin/view-users')->with('error', 'Email address is already in use.');
+            return redirect()->to('/admin/dashboard')->with('error', 'Email address is already in use.');
         }
 
         $updateData = [
@@ -138,20 +146,20 @@ class AdminDashboard extends BaseController
 
         $this->appendAuditTrail('admin_update_user', 'Updated user account ID: ' . $id);
 
-        return redirect()->to('/admin/view-users')->with('success', 'User account updated successfully.');
+        return redirect()->to('/admin/dashboard')->with('success', 'User account updated successfully.');
     }
 
     public function deleteUser(int $id): RedirectResponse
     {
         if ($id === (int) session('userId')) {
-            return redirect()->to('/admin/view-users')->with('error', 'You cannot delete your own account.');
+            return redirect()->to('/admin/dashboard')->with('error', 'You cannot delete your own account.');
         }
 
         $userModel = new UserModel();
         $user = $userModel->find($id);
 
         if (! is_array($user)) {
-            return redirect()->to('/admin/view-users')->with('error', 'User account not found.');
+            return redirect()->to('/admin/dashboard')->with('error', 'User account not found.');
         }
 
         $db = db_connect();
@@ -193,11 +201,11 @@ class AdminDashboard extends BaseController
                 'message' => $exception->getMessage(),
             ]);
 
-            return redirect()->to('/admin/view-users')->with('error', 'Unable to delete user account because related records still exist.');
+            return redirect()->to('/admin/dashboard')->with('error', 'Unable to delete user account because related records still exist.');
         }
 
         $this->appendAuditTrail('admin_delete_user', 'Deleted user account ID: ' . $id);
 
-        return redirect()->to('/admin/view-users')->with('success', 'User account deleted successfully.');
+        return redirect()->to('/admin/dashboard')->with('success', 'User account deleted successfully.');
     }
 }

@@ -9,9 +9,20 @@ class UserDashboard extends BaseController
 {
     use TracksAuditAndBilling;
 
-    public function index(): RedirectResponse
+    public function index(): string
     {
-        return redirect()->to('/user/compute-bill');
+        $userId = (int) session('userId');
+
+        return view('dashboard/user', [
+            'fullname'           => (string) session('fullname'),
+            'billingCount'       => $this->countBillingHistory($userId),
+            'billingTotal'       => $this->sumBillingTotal($userId),
+            'billingHistory'     => $this->listBillingHistory($userId, 30),
+            'billingStorageReady'=> $this->getBillingTableName() !== null,
+            'auditTrails'        => $this->listAuditTrails($userId, 30),
+            'auditStorageReady'  => $this->getAuditTableName() !== null,
+            'lastResult'         => session('lastBillResult'),
+        ]);
     }
 
     public function computeBillPage(): string
@@ -80,7 +91,7 @@ class UserDashboard extends BaseController
         ];
 
         if (! $validation->run($payload)) {
-            return redirect()->to('/user/compute-bill')->with('error', implode(' ', $validation->getErrors()));
+            return redirect()->to('/user/dashboard')->with('error', implode(' ', $validation->getErrors()));
         }
 
         $bill = [
@@ -101,13 +112,13 @@ class UserDashboard extends BaseController
         session()->setFlashdata('lastBillResult', $bill);
 
         if (! $saved) {
-            return redirect()->to('/user/compute-bill')->with(
+            return redirect()->to('/user/dashboard')->with(
                 'warning',
                 'Bill computed successfully, but billing history table is not available yet.'
             );
         }
 
-        return redirect()->to('/user/compute-bill')->with('success', 'Bill computed and saved successfully.');
+        return redirect()->to('/user/dashboard')->with('success', 'Bill computed and saved successfully.');
     }
 
     private function computeTieredTotalAmount(float $kwUsed): float

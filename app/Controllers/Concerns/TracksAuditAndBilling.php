@@ -136,6 +136,50 @@ trait TracksAuditAndBilling
         return $builder->limit($limit)->get()->getResultArray();
     }
 
+    protected function countBillingHistory(int $userId): int
+    {
+        $table = $this->getBillingTableName();
+        if ($table === null) {
+            return 0;
+        }
+
+        $db = db_connect();
+        $fields = $db->getFieldNames($table);
+        $builder = $db->table($table);
+
+        if (in_array('user_id', $fields, true)) {
+            $builder->where('user_id', $userId);
+        }
+
+        return (int) $builder->countAllResults();
+    }
+
+    protected function sumBillingTotal(int $userId): float
+    {
+        $table = $this->getBillingTableName();
+        if ($table === null) {
+            return 0.0;
+        }
+
+        $db = db_connect();
+        $fields = $db->getFieldNames($table);
+
+        $amountCol = in_array('total_amount', $fields, true) ? 'total_amount' : (in_array('amount_due', $fields, true) ? 'amount_due' : null);
+        if ($amountCol === null) {
+            return 0.0;
+        }
+
+        $builder = $db->table($table);
+
+        if (in_array('user_id', $fields, true)) {
+            $builder->where('user_id', $userId);
+        }
+
+        $row = $builder->selectSum($amountCol, 'total')->get()->getRowArray();
+
+        return (float) ($row['total'] ?? 0.0);
+    }
+
     private function resolveAvailableTable(array $tableNames): ?string
     {
         $db = db_connect();

@@ -62,6 +62,43 @@
             <div class="alert alert-danger"><?= esc((string) session('error')) ?></div>
         <?php endif; ?>
 
+        <div class="row g-3 mb-4">
+            <div class="col-12 col-sm-6 col-lg-4">
+                <div class="card panel h-100">
+                    <div class="card-body d-flex align-items-center gap-3 py-3">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                             style="width:52px;height:52px;background:rgba(29,53,87,0.1);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="var(--mk-primary)" viewBox="0 0 16 16">
+                                <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="text-muted small">Registered Users</div>
+                            <div class="fw-bold fs-3 lh-1"><?= esc((string) $userCount) ?></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-4">
+                <div class="card panel h-100">
+                    <div class="card-body d-flex align-items-center gap-3 py-3">
+                        <a href="#manage-users"
+                           class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 text-decoration-none"
+                           style="width:52px;height:52px;background:rgba(230,57,70,0.1);"
+                           title="Create a new user account">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="var(--mk-accent)" viewBox="0 0 16 16">
+                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                            </svg>
+                        </a>
+                        <div>
+                            <div class="text-muted small">Quick Action</div>
+                            <a href="#manage-users" class="fw-semibold text-decoration-none" style="color:var(--mk-accent);">Create New User</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row g-4 mb-4">
             <div class="col-12 col-lg-5">
                 <div class="card panel h-100" id="manage-users">
