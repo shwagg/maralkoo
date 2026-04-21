@@ -7,14 +7,14 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 	<style>
 		:root {
-			--mk-a: #264653;
-			--mk-b: #2a9d8f;
+			--mk-a: #4683cb;
+			--mk-b: #4683cb;
 		}
 
 		body {
 			min-height: 100vh;
 			font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-			background: radial-gradient(circle at 80% -20%, #d5f3ef, #f9fcff 55%);
+			background: radial-gradient(circle at 80% -20%, rgba(70, 131, 203, 0.16), #f9fcff 55%);
 			margin: 0;
 		}
 
@@ -27,7 +27,7 @@
 		.panel {
 			border: 0;
 			border-radius: 1rem;
-			box-shadow: 0 1rem 2rem rgba(38, 70, 83, 0.08);
+			box-shadow: 0 1rem 2rem rgba(70, 131, 203, 0.12);
 		}
 
 		.panel-header {
@@ -38,17 +38,25 @@
 		}
 
 		.result-box {
-			background: linear-gradient(130deg, #fff8e7, #fef3c7);
-			border: 1px solid #f1d8a5;
+			background: linear-gradient(130deg, rgba(70, 131, 203, 0.06), rgba(70, 131, 203, 0.14));
+			border: 1px solid rgba(70, 131, 203, 0.22);
 			border-radius: 0.75rem;
 			padding: 0.9rem 1rem;
 		}
 
 		.preview-box {
-			background: linear-gradient(130deg, #e8f8f5, #d5f5e3);
-			border: 1px solid #a9dfbf;
+			background: linear-gradient(130deg, rgba(70, 131, 203, 0.06), rgba(70, 131, 203, 0.14));
+			border: 1px solid rgba(70, 131, 203, 0.22);
 			border-radius: 0.75rem;
 			padding: 0.9rem 1rem;
+		}
+
+		.btn-primary,
+		.btn-primary:hover,
+		.btn-primary:focus,
+		.btn-primary:active {
+			background-color: #4683cb;
+			border-color: #4683cb;
 		}
 	</style>
 </head>
@@ -85,7 +93,7 @@
 					<div id="bill-preview" class="preview-box mb-3" style="display:none;">
 						<div class="d-flex justify-content-between align-items-center">
 							<span class="fw-semibold">Computed Total</span>
-							<strong id="preview-total" class="fs-5 text-success">₱0.00</strong>
+							<strong id="preview-total" class="fs-5" style="color: var(--mk-a);">₱0.00</strong>
 						</div>
 						<div class="small text-muted mt-1" id="preview-rate"></div>
 					</div>

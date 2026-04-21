@@ -36,6 +36,7 @@ $menuItems = $isAdmin
 		gap: 1rem;
 		width: 100%;
 		box-sizing: border-box;
+		margin-bottom: 1.25rem;
 	}
 
 	.mk-navbar-brand {
@@ -76,8 +77,8 @@ $menuItems = $isAdmin
 
 	.mk-navbar-nav .mk-nav-link:hover,
 	.mk-navbar-nav .mk-nav-link.active {
-		color: #0d6efd;
-		background: #f0f6ff;
+		color: #4683cb;
+		background: rgba(70, 131, 203, 0.12);
 	}
 
 	.mk-navbar-actions {
@@ -96,8 +97,8 @@ $menuItems = $isAdmin
 	.mk-navbar-actions .mk-logout-btn {
 		font-size: 0.88rem;
 		font-weight: 500;
-		color: #0d6efd;
-		border: 1.5px solid #0d6efd;
+		color: #4683cb;
+		border: 1.5px solid #4683cb;
 		background: transparent;
 		padding: 0.38rem 1.1rem;
 		border-radius: 0.375rem;
@@ -107,7 +108,7 @@ $menuItems = $isAdmin
 	}
 
 	.mk-navbar-actions .mk-logout-btn:hover {
-		background: #0d6efd;
+		background: #4683cb;
 		color: #ffffff;
 	}
 

@@ -7,14 +7,14 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 	<style>
 		:root {
-			--mk-a: #264653;
-			--mk-b: #2a9d8f;
+			--mk-a: #4683cb;
+			--mk-b: #4683cb;
 		}
 
 		body {
 			min-height: 100vh;
 			font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-			background: radial-gradient(circle at 80% -20%, #d5f3ef, #f9fcff 55%);
+			background: radial-gradient(circle at 80% -20%, rgba(70, 131, 203, 0.16), #f9fcff 55%);
 			margin: 0;
 		}
 
@@ -27,7 +27,7 @@
 		.panel {
 			border: 0;
 			border-radius: 1rem;
-			box-shadow: 0 1rem 2rem rgba(38, 70, 83, 0.08);
+			box-shadow: 0 1rem 2rem rgba(70, 131, 203, 0.12);
 		}
 
 		.panel-header {

@@ -8,13 +8,13 @@
 	<style>
 		:root {
 			--mk-bg: #f8f9fa;
-			--mk-primary: #1d3557;
-			--mk-primary-soft: #457b9d;
-			--mk-accent: #e63946;
+			--mk-primary: #4683cb;
+			--mk-primary-soft: #4683cb;
+			--mk-accent: #4683cb;
 		}
 
 		body {
-			background: linear-gradient(145deg, #eef4f8, var(--mk-bg));
+			background: linear-gradient(145deg, rgba(70, 131, 203, 0.12), var(--mk-bg));
 			font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 			min-height: 100vh;
 			margin: 0;
@@ -29,7 +29,7 @@
 		.panel {
 			border: 0;
 			border-radius: 1rem;
-			box-shadow: 0 1rem 1.8rem rgba(29, 53, 87, 0.08);
+			box-shadow: 0 1rem 1.8rem rgba(70, 131, 203, 0.12);
 		}
 
 		.panel-header {
@@ -40,10 +40,19 @@
 		}
 
 		.badge-role {
-			background: rgba(230, 57, 70, 0.15);
+			background: rgba(70, 131, 203, 0.15);
 			color: var(--mk-accent);
-			border: 1px solid rgba(230, 57, 70, 0.3);
+			border: 1px solid rgba(70, 131, 203, 0.3);
 			font-weight: 600;
+		}
+
+		.btn-outline-primary,
+		.btn-outline-primary:hover,
+		.btn-outline-primary:focus,
+		.btn-outline-primary:active {
+			border-color: #4683cb;
+			color: #ffffff;
+			background-color: #4683cb;
 		}
 
 		.table thead th {
@@ -115,7 +124,7 @@
 										</form>
 
 										<form method="post" action="/admin/users/<?= esc((string) $user['id']) ?>/delete" class="mt-2" onsubmit="return confirm('Delete this account?');">
-											<button type="submit" class="btn btn-sm btn-outline-danger w-100">Delete</button>
+											<button type="submit" class="btn btn-sm btn-outline-primary w-100">Delete</button>
 										</form>
 									</td>
 								</tr>

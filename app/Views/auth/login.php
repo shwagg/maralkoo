@@ -8,7 +8,7 @@
     <style>
         body {
             min-height: 100vh;
-            background-color: #f5f6fa;
+            background: radial-gradient(circle at top, rgba(70, 131, 203, 0.12), #f5f6fa 55%);
             font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         }
 
@@ -51,7 +51,7 @@
         }
 
         .form-control-flat:focus {
-            border-bottom-color: #495057;
+            border-bottom-color: #4683cb;
             background: transparent;
         }
 
@@ -78,8 +78,8 @@
 
         /* ── Login button ── */
         .btn-login {
-            background-color: #b0bec5;
-            border-color: #b0bec5;
+            background-color: #4683cb;
+            border-color: #4683cb;
             color: #ffffff;
             font-size: 0.9rem;
             letter-spacing: 0.04em;
@@ -89,8 +89,8 @@
 
         .btn-login:hover,
         .btn-login:focus {
-            background-color: #90a4ae;
-            border-color: #90a4ae;
+            background-color: rgba(70, 131, 203, 0.92);
+            border-color: rgba(70, 131, 203, 0.92);
             color: #ffffff;
         }
 
