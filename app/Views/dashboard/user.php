@@ -47,13 +47,7 @@
 </head>
 <body>
     <div class="dashboard-shell">
-        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
-            <div>
-                <h1 class="h3 mb-1">User Dashboard</h1>
-                <p class="text-muted mb-0">Welcome, <?= esc($fullname) ?>. You can compute electric bills and view your records.</p>
-            </div>
-            <a href="/logout" class="btn btn-outline-secondary">Logout</a>
-        </div>
+        <?= view('components/header', ['role' => 'user', 'fullname' => $fullname]) ?>
 
         <?php if (session('success')): ?>
             <div class="alert alert-success"><?= esc((string) session('success')) ?></div>
@@ -69,7 +63,7 @@
 
         <div class="row g-4 mb-4">
             <div class="col-12 col-lg-6">
-                <div class="card panel h-100">
+                <div class="card panel h-100" id="compute-electric-bill">
                     <div class="panel-header">
                         <h2 class="h5 mb-0">Compute Electric Bill</h2>
                     </div>
@@ -114,7 +108,7 @@
             </div>
 
             <div class="col-12 col-lg-6">
-                <div class="card panel h-100">
+                <div class="card panel h-100" id="billing-history">
                     <div class="panel-header">
                         <h2 class="h5 mb-0">My Billing History</h2>
                     </div>
@@ -160,7 +154,7 @@
             </div>
         </div>
 
-        <div class="card panel">
+        <div class="card panel" id="action-trail">
             <div class="panel-header">
                 <h2 class="h5 mb-0">My Action Trail</h2>
             </div>

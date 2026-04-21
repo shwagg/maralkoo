@@ -21,7 +21,7 @@ class UserOnly implements FilterInterface
             return null;
         }
 
-        return redirect()->to('/admin/dashboard')->with('error', 'Admins are not allowed to compute bills.');
+        return redirect()->to('/admin/manage-users')->with('error', 'Admins are not allowed to compute bills.');
     }
 
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)

@@ -18,10 +18,10 @@ class Auth extends BaseController
             $role = strtolower(trim((string) session('role')));
 
             if ($role === 'admin') {
-                return redirect()->to('/admin/dashboard');
+                return redirect()->to('/admin/manage-users');
             }
 
-            return redirect()->to('/user/dashboard');
+            return redirect()->to('/user/compute-bill');
         }
 
         return view('auth/login');
@@ -82,7 +82,7 @@ class Auth extends BaseController
 
         $this->appendAuditTrail('login', 'User logged in successfully.');
 
-        $redirectTo = $user['role'] === 'admin' ? '/admin/dashboard' : '/user/dashboard';
+        $redirectTo = $user['role'] === 'admin' ? '/admin/manage-users' : '/user/compute-bill';
 
         return $this->response->setJSON([
             'status' => 'success',

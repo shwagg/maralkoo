@@ -52,13 +52,7 @@
 </head>
 <body>
     <div class="dashboard-shell">
-        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
-            <div>
-                <h1 class="h3 mb-1">Admin Dashboard</h1>
-                <p class="text-muted mb-0">Welcome, <?= esc($fullname) ?>. You can manage user accounts and monitor audit activity.</p>
-            </div>
-            <a href="/logout" class="btn btn-outline-secondary">Logout</a>
-        </div>
+        <?= view('components/header', ['role' => 'admin', 'fullname' => $fullname]) ?>
 
         <?php if (session('success')): ?>
             <div class="alert alert-success"><?= esc((string) session('success')) ?></div>
@@ -70,7 +64,7 @@
 
         <div class="row g-4 mb-4">
             <div class="col-12 col-lg-5">
-                <div class="card panel h-100">
+                <div class="card panel h-100" id="manage-users">
                     <div class="panel-header">
                         <h2 class="h5 mb-0">Create User Account</h2>
                     </div>
@@ -102,7 +96,7 @@
             </div>
 
             <div class="col-12 col-lg-7">
-                <div class="card panel h-100">
+                <div class="card panel h-100" id="view-users">
                     <div class="panel-header d-flex justify-content-between align-items-center">
                         <h2 class="h5 mb-0">Registered Users</h2>
                         <span class="badge text-bg-light">Total: <?= count($users) ?></span>
@@ -168,7 +162,7 @@
             </div>
         </div>
 
-        <div class="card panel">
+        <div class="card panel" id="audit-logs">
             <div class="panel-header">
                 <h2 class="h5 mb-0">System Audit Trails</h2>
             </div>

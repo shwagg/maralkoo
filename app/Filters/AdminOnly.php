@@ -19,7 +19,7 @@ class AdminOnly implements FilterInterface
             return null;
         }
 
-        return redirect()->to('/user/dashboard')->with('error', 'You do not have access to the admin dashboard.');
+        return redirect()->to('/user/compute-bill')->with('error', 'You do not have access to admin pages.');
     }
 
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)

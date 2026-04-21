@@ -9,20 +9,39 @@ class UserDashboard extends BaseController
 {
     use TracksAuditAndBilling;
 
-    public function index(): string
+    public function index(): RedirectResponse
+    {
+        return redirect()->to('/user/compute-bill');
+    }
+
+    public function computeBillPage(): string
+    {
+        return view('user/computebill', [
+            'fullname' => (string) session('fullname'),
+            'lastResult' => session('lastBillResult'),
+        ]);
+    }
+
+    public function billingHistory(): string
     {
         $userId = (int) session('userId');
 
-        $data = [
+        return view('user/billinghistory', [
             'fullname' => (string) session('fullname'),
             'billingHistory' => $this->listBillingHistory($userId, 30),
-            'auditTrails' => $this->listAuditTrails($userId, 30),
             'billingStorageReady' => $this->getBillingTableName() !== null,
-            'auditStorageReady' => $this->getAuditTableName() !== null,
-            'lastResult' => session('lastBillResult'),
-        ];
+        ]);
+    }
 
-        return view('dashboard/user', $data);
+    public function actionTrail(): string
+    {
+        $userId = (int) session('userId');
+
+        return view('user/actiontrail', [
+            'fullname' => (string) session('fullname'),
+            'auditTrails' => $this->listAuditTrails($userId, 30),
+            'auditStorageReady' => $this->getAuditTableName() !== null,
+        ]);
     }
 
     public function computeBill(): RedirectResponse
@@ -45,11 +64,11 @@ class UserDashboard extends BaseController
         ];
 
         if (! $validation->run($payload)) {
-            return redirect()->to('/user/dashboard')->with('error', implode(' ', $validation->getErrors()));
+            return redirect()->to('/user/compute-bill')->with('error', implode(' ', $validation->getErrors()));
         }
 
         if ($payload['current_reading'] < $payload['previous_reading']) {
-            return redirect()->to('/user/dashboard')->with('error', 'Current reading cannot be lower than previous reading.');
+            return redirect()->to('/user/compute-bill')->with('error', 'Current reading cannot be lower than previous reading.');
         }
 
         $kwhUsed = $payload['current_reading'] - $payload['previous_reading'];
@@ -75,12 +94,12 @@ class UserDashboard extends BaseController
         session()->setFlashdata('lastBillResult', $bill);
 
         if (! $saved) {
-            return redirect()->to('/user/dashboard')->with(
+            return redirect()->to('/user/compute-bill')->with(
                 'warning',
                 'Bill computed successfully, but billing history table is not available yet.'
             );
         }
 
-        return redirect()->to('/user/dashboard')->with('success', 'Bill computed and saved successfully.');
+        return redirect()->to('/user/compute-bill')->with('success', 'Bill computed and saved successfully.');
     }
 }

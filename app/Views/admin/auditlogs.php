@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Audit Logs | Meralkoo</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<style>
+		:root {
+			--mk-bg: #f8f9fa;
+			--mk-primary: #1d3557;
+			--mk-primary-soft: #457b9d;
+		}
+
+		body {
+			background: linear-gradient(145deg, #eef4f8, var(--mk-bg));
+			font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+			min-height: 100vh;
+		}
+
+		.dashboard-shell {
+			max-width: 1200px;
+			margin: 2rem auto;
+			padding: 0 1rem;
+		}
+
+		.panel {
+			border: 0;
+			border-radius: 1rem;
+			box-shadow: 0 1rem 1.8rem rgba(29, 53, 87, 0.08);
+		}
+
+		.panel-header {
+			background: linear-gradient(120deg, var(--mk-primary), var(--mk-primary-soft));
+			color: #fff;
+			border-radius: 1rem 1rem 0 0;
+			padding: 1rem 1.25rem;
+		}
+	</style>
+</head>
+<body>
+	<div class="dashboard-shell">
+		<?= view('components/header', ['role' => 'admin', 'fullname' => $fullname]) ?>
+
+		<?php if (session('success')): ?>
+			<div class="alert alert-success"><?= esc((string) session('success')) ?></div>
+		<?php endif; ?>
+
+		<?php if (session('error')): ?>
+			<div class="alert alert-danger"><?= esc((string) session('error')) ?></div>
+		<?php endif; ?>
+
+		<div class="card panel">
+			<div class="panel-header">
+				<h2 class="h5 mb-0">Audit Logs</h2>
+			</div>
+			<div class="card-body p-0">
+				<?php if (! $auditStorageReady): ?>
+					<div class="alert alert-warning m-3 mb-0">Audit trail table is not available yet. Create an audit table to persist activity logs.</div>
+				<?php endif; ?>
+
+				<div class="table-responsive">
+					<table class="table table-striped mb-0">
+						<thead>
+							<tr>
+								<th>User</th>
+								<th>Role</th>
+								<th>Action</th>
+								<th>Details</th>
+								<th>When</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php foreach ($auditTrails as $trail): ?>
+								<tr>
+									<td><?= esc((string) ($trail['username'] ?? $trail['user_id'] ?? '-')) ?></td>
+									<td><?= esc((string) ($trail['role'] ?? '-')) ?></td>
+									<td><?= esc((string) ($trail['action'] ?? '-')) ?></td>
+									<td><?= esc((string) ($trail['details'] ?? '-')) ?></td>
+									<td><?= esc((string) ($trail['created_at'] ?? $trail['createdAt'] ?? '-')) ?></td>
+								</tr>
+							<?php endforeach; ?>
+
+							<?php if ($auditTrails === []): ?>
+								<tr>
+									<td colspan="5" class="text-center text-muted py-4">No audit trails available yet.</td>
+								</tr>
+							<?php endif; ?>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
