@@ -16,12 +16,13 @@
 			background: linear-gradient(145deg, #eef4f8, var(--mk-bg));
 			font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 			min-height: 100vh;
+			margin: 0;
 		}
 
 		.dashboard-shell {
-			max-width: 1200px;
-			margin: 2rem auto;
-			padding: 0 1rem;
+			width: 100%;
+			margin: 0;
+			padding: 0 0 1.5rem;
 		}
 
 		.panel {
@@ -39,7 +40,7 @@
 	</style>
 </head>
 <body>
-	<div class="dashboard-shell">
+	<div class="dashboard-shell container-fluid px-0">
 		<?= view('components/header', ['role' => 'admin', 'fullname' => $fullname]) ?>
 
 		<?php if (session('success')): ?>

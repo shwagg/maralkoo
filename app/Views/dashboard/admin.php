@@ -17,12 +17,13 @@
             background: linear-gradient(145deg, #eef4f8, var(--mk-bg));
             font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
+            margin: 0;
         }
 
         .dashboard-shell {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
+            width: 100%;
+            margin: 0;
+            padding: 0 0 1.5rem;
         }
 
         .panel {
@@ -51,7 +52,7 @@
     </style>
 </head>
 <body>
-    <div class="dashboard-shell">
+    <div class="dashboard-shell container-fluid px-0">
         <?= view('components/header', ['role' => 'admin', 'fullname' => $fullname]) ?>
 
         <?php if (session('success')): ?>
@@ -63,7 +64,7 @@
         <?php endif; ?>
 
         <div class="row g-3 mb-4">
-            <div class="col-12 col-sm-6 col-lg-4">
+            <div class="col-12 col-md-6">
                 <div class="card panel h-100">
                     <div class="card-body d-flex align-items-center gap-3 py-3">
                         <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
@@ -79,7 +80,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-sm-6 col-lg-4">
+            <div class="col-12 col-md-6">
                 <div class="card panel h-100">
                     <div class="card-body d-flex align-items-center gap-3 py-3">
                         <a href="#manage-users"

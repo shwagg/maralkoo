@@ -34,6 +34,8 @@ $menuItems = $isAdmin
 		align-items: center;
 		justify-content: space-between;
 		gap: 1rem;
+		width: 100%;
+		box-sizing: border-box;
 	}
 
 	.mk-navbar-brand {
@@ -125,7 +127,7 @@ $menuItems = $isAdmin
 	}
 </style>
 
-<header class="mk-navbar mb-3">
+<header class="mk-navbar">
 	<a href="<?= $isAdmin ? '/admin/dashboard' : '/user/dashboard' ?>" class="mk-navbar-brand" aria-label="MeralKoo Home">
 		<img src="/assets/MeralKoo.svg" alt="MeralKoo logo">
 	</a>
