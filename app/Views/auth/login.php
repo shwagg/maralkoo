@@ -14,8 +14,8 @@
 
         /* ── Logo ── */
         .mk-logo {
-            width: 56px;
-            height: 56px;
+            width: 64px;
+            height: 64px;
             object-fit: contain;
         }
 
