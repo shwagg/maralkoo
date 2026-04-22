@@ -1,10 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>User Dashboard | Meralkoo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <?= view('components/head_assets', ['title' => 'User Dashboard | Meralkoo']) ?>
     <style>
         :root {
             --mk-a: #4683cb;
@@ -120,20 +117,17 @@
         </div>
         </div>
     </div>
- </body>
- </html>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <?= view('components/footer_assets') ?>
     <script>
-        // Auto-hide alerts after 5 seconds
         document.addEventListener('DOMContentLoaded', function () {
-            const alertElement = document.getElementById('loginAlert');
-            if (alertElement) {
-                setTimeout(() => {
+            const alertElements = document.querySelectorAll('.alert');
+
+            alertElements.forEach(function (alertElement) {
+                setTimeout(function () {
                     alertElement.classList.add('d-none');
                 }, 5000);
-            }
+            });
         });
-</script>
+    </script>
 </body>
 </html>

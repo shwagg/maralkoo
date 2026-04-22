@@ -1,10 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Meralkoo | Login</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <?= view('components/head_assets', ['title' => 'Meralkoo | Login']) ?>
     <style>
         body {
             min-height: 100vh;
@@ -166,7 +163,7 @@
 
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <?= view('components/footer_assets') ?>
     <script>
         (function () {
             const $form      = $('#loginForm');
@@ -191,7 +188,7 @@
                 $submitBtn.prop('disabled', true).text('Logging in...');
                 $alert.addClass('d-none').text('');
 
-                $.ajax({
+                window.Meralkoo.ajax({
                     url: '/login',
                     type: 'POST',
                     data: $form.serialize(),

@@ -1,10 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Compute Bill | Meralkoo</title>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<?= view('components/head_assets', ['title' => 'Compute Bill | Meralkoo']) ?>
 	<style>
 		:root {
 			--mk-a: #4683cb;
@@ -111,6 +108,7 @@
 			</div>
 		</div>
 	</div>
+<?= view('components/footer_assets') ?>
 <script>
 (function () {
 	var kwInput    = document.getElementById('kw_used');
@@ -122,9 +120,14 @@
 	function fetchPreview(kw) {
 		previewTotal.textContent = 'Computing…';
 		previewBox.style.display = 'block';
-		fetch('/user/bills/preview?kw_used=' + encodeURIComponent(kw))
-			.then(function (r) { return r.json(); })
-			.then(function (data) {
+		window.Meralkoo.ajax({
+			url: '/user/bills/preview',
+			type: 'GET',
+			dataType: 'json',
+			data: {
+				kw_used: kw
+			}
+		}).done(function (data) {
 				previewTotal.textContent = data.total_formatted;
 				previewRate.textContent  = data.rate_label;
 			})
